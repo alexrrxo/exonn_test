@@ -1,13 +1,15 @@
 import styled from "styled-components";
 
 const Root = styled.div`
-	padding: 15px 20px;
+	width: 100%;
+	height: 100%;
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	cursor: pointer;
+	border-radius: 6px;
+	background-color: #FFF;
 `;
 
 export default Root;

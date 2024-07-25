@@ -3,7 +3,7 @@ import Root from "./components/Root"
 
 const LeftBar = () => {
 	return (
-		<Root>LeftBar</Root>
+		<Root></Root>
 	)
 } 
 

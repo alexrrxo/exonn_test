@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-const Root = styled.div<{color: string}>`
-	color: ${(props) => (props.color || "#7F858D")};
+const Root = styled.div<{selected: boolean}>`
+	color: ${(props) => (props.selected ? "#343434" : "#7F858D")};
 
 	font-family: Poppins;
 	font-size: 14px;

@@ -1,12 +1,18 @@
 import React from 'react'
 import Root from "./components/Root"
-import TabsBar from "./components/Tabs"
+import TabsBar from "./components/TabsBar"
+import Space from "./components/Space"
+import Content from "./components/Content"
 
 const RightBar = () => {
 	return (
-		<Root>
-			<TabsBar />
-		</Root>
+		<>
+			<Root>
+				<Space />
+				<TabsBar />
+				<Content />
+			</Root>
+		</>
 	)
 } 
 
