@@ -30,7 +30,7 @@ const TabsContainer = styled.div`
 }
 
 &::-webkit-scrollbar-thumb:hover {
-    background: #a0a4a8; /* Цвет ползунка при наведении */
+    background: #a0a4a8;
 }
 
 & > div:not(:first-child)::after {

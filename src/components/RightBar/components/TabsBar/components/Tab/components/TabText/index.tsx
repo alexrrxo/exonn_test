@@ -2,13 +2,13 @@ import React, { FC } from 'react'
 import Root from "./components/Root"
 
 interface Props {
-	selected: boolean;
 	text: string;
+	textcolor: string;
 }
 
-const TabText: FC<Props> = ({ selected, text }) => {
+const TabText: FC<Props> = ({ text, textcolor }) => {
 	return (
-		<Root selected={selected}>{text}</Root>
+		<Root textcolor={textcolor}>{text}</Root>
 	)
 }
 

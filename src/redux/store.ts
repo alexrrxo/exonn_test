@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
+import { TypedUseSelectorHook, useDispatch } from 'react-redux';
 import tabsSlice from "./slices/tabs-slice";
+import { useSelector } from "react-redux";
 
 export const store = configureStore({
-  reducer: {
+	reducer: {
 		tabs: tabsSlice
   },
 });
@@ -11,4 +12,5 @@ export const store = configureStore({
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
 
-export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useTypedDispatch = () => useDispatch<AppDispatch>();
+export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;

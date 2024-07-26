@@ -37,9 +37,9 @@ export default function ListButton() {
 				marginThreshold={0}
 				
       >
-        <Tab showText text="123123232" />
-        <Tab showText text="123123232" />
-        <Tab showText text="123123232" />
+        <Tab tab={{} as any} showText text="123123232" />
+        <Tab tab={{} as any} showText text="123123232" />
+        <Tab tab={{} as any} showText text="123123232" />
       </CustomMenu>
     </div>
   );

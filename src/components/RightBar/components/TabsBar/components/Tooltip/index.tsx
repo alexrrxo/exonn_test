@@ -7,9 +7,12 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps & { classNam
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f0f0f0', // Цвет фона
-    color: '#333', // Цвет текста
+		padding: 0,
+    color: '#333',
     fontSize: 14,
+		border: "1px solid #AEB6CE33",
+    backgroundColor: '#f0f0f0',
+		borderRadius: "6px"
   },
   [`& .${tooltipClasses.arrow}`]: {
     color: '#f0f0f0', // Цвет стрелки
@@ -22,7 +25,7 @@ interface CustomTooltipComponentProps {
 
 const CustomTooltipComponent: FC<CustomTooltipComponentProps> = ({children }) => {
   return (
-    <CustomTooltip title={children} arrow>
+    <CustomTooltip title={children} >
 			{children}
 		</CustomTooltip>
   );
