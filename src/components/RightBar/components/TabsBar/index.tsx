@@ -5,7 +5,7 @@ import Tab from "./components/Tab";
 import Button from "./components/ListButton";
 import TabsContainer from "./components/TabsContainer";
 import { useTypedDispatch, useTypedSelector } from "../../../../redux/store";
-import { setTabs, selectTab, Tab as TabType } from "../../../../redux/slices/tabs-slice";
+import { setUnlockedTabs, selectTab, Tab as TabType, setLockedTabs } from "../../../../redux/slices/tabs-slice";
 
 const TabsBar = () => {
 	const dispatch = useTypedDispatch()
@@ -16,7 +16,20 @@ const TabsBar = () => {
 	
   const timeoutRef = useRef<any>(null);
 
-  const onDragEnd = (result: DropResult) => {
+  const onDragEndLocked = (result: DropResult) => {
+    clearTimeout(timeoutRef.current);
+    setPendingDragId(null);
+
+    if (!result.destination) return;
+
+    const reorderedTabs = Array.from(lockedTabs);
+    const [removed] = reorderedTabs.splice(result.source.index, 1);
+    reorderedTabs.splice(result.destination.index, 0, removed);
+
+    dispatch(setLockedTabs(reorderedTabs));
+  };
+
+  const onDragEndUnlocked = (result: DropResult) => {
     clearTimeout(timeoutRef.current);
     setPendingDragId(null);
 
@@ -26,7 +39,7 @@ const TabsBar = () => {
     const [removed] = reorderedTabs.splice(result.source.index, 1);
     reorderedTabs.splice(result.destination.index, 0, removed);
 
-    dispatch(setTabs(reorderedTabs));
+    dispatch(setUnlockedTabs(reorderedTabs));
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>, draggableId: string) => {
@@ -57,8 +70,8 @@ const TabsBar = () => {
 
   return (
     <Root>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable direction="horizontal" droppableId="droppable">
+			<DragDropContext onDragEnd={onDragEndLocked}>
+        <Droppable direction="horizontal" droppableId="droppable-0">
           {(provided) => (
             <TabsContainer
               {...provided.droppableProps}
@@ -66,7 +79,7 @@ const TabsBar = () => {
             >
               {lockedTabs.map((tab, i) => (
                 <Draggable key={tab.id} draggableId={tab.id} index={i}
-								isDragDisabled={tab.isLocked}
+								disableInteractiveElementBlocking
 								>
                   {(provided, snapshot) => (
                     <div
@@ -91,6 +104,18 @@ const TabsBar = () => {
                   )}
                 </Draggable>
               ))}
+              {provided.placeholder}
+            </TabsContainer>
+          )}
+        </Droppable>
+      </DragDropContext>
+      <DragDropContext onDragEnd={onDragEndUnlocked}>
+        <Droppable direction="horizontal" droppableId="droppable-1">
+          {(provided) => (
+            <TabsContainer
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
 							{tabs.map((tab, i) => (
                 <Draggable key={tab.id} draggableId={tab.id} index={i}
 								isDragDisabled={tab.isLocked}

@@ -7,7 +7,7 @@ const Root = styled.div`
 	height: 100%;
 
 	display: grid;
-  grid-template-columns: 1fr 32px; 
+  grid-template-columns: auto 1fr 32px; 
 
 &::-webkit-scrollbar {
   height: 8px;

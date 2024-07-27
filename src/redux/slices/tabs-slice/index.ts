@@ -47,8 +47,11 @@ export const tabsSlice = createSlice({
   name: 'tabs',
   initialState,
   reducers: {
-    setTabs: (state, action: PayloadAction<Tab[]>) => {
+    setUnlockedTabs: (state, action: PayloadAction<Tab[]>) => {
       state.tabs = action.payload;
+    },
+		setLockedTabs: (state, action: PayloadAction<Tab[]>) => {
+      state.lockedTabs = action.payload;
     },
     selectTab: (state, action: PayloadAction<Tab>) => {
       state.selectedTab = action.payload;
@@ -76,6 +79,6 @@ export const tabsSlice = createSlice({
   },
 });
 
-export const { setTabs, selectTab, lockTab, unlockTab } = tabsSlice.actions;
+export const { setUnlockedTabs, setLockedTabs, selectTab, lockTab, unlockTab } = tabsSlice.actions;
 
 export default tabsSlice.reducer;
