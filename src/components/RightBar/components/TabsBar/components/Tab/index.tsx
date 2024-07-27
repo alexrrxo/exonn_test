@@ -4,7 +4,7 @@ import TabText from "./components/TabText"
 import TabIcon from "./components/TabIcon";
 import CustomTooltipComponent from "../Tooltip";
 import { useTypedDispatch } from "../../../../../../redux/store";
-import { Tab as TabType, unlockTab } from "../../../../../../redux/slices/tabs-slice";
+import { lockTab, Tab as TabType, unlockTab } from "../../../../../../redux/slices/tabs-slice";
 
 interface Props {
 	tab: TabType;
@@ -56,16 +56,21 @@ const Tab: FC<Props> = ({ tab, isLocked = false, isDragging = false, tooltip = f
 		dispatch(unlockTab(tab))
 	}, [dispatch])
 
+	const lockTabHandler = useCallback(() => {
+		dispatch(lockTab(tab))
+	}, [dispatch])
+
 	return (
 		tooltip ? 
 			<CustomTooltipComponent>
-				<Root bgcolor={bgcolor} linecolor={linecolor}> 
+				<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler}> 
 					<TabIcon showText={showText} />
 					{showText && <TabText text={text} textcolor={textcolor} />}
+					{isLocked && <button onClick={unlockTabHandler}>X</button>}
 				</Root>
 			</CustomTooltipComponent> 
 			: 
-			<Root bgcolor={bgcolor} linecolor={linecolor}> 
+			<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler}> 
 				<TabIcon showText={showText} />
 				{showText && <TabText text={text} textcolor={textcolor} />}
 				{isLocked && <button onClick={unlockTabHandler}>X</button>}

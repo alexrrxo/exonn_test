@@ -9,7 +9,7 @@ import { setTabs, selectTab, Tab as TabType } from "../../../../redux/slices/tab
 
 const TabsBar = () => {
 	const dispatch = useTypedDispatch()
-	const {tabs, selectedTab} = useTypedSelector(state => state.tabs);
+	const {tabs, lockedTabs, selectedTab} = useTypedSelector(state => state.tabs);
 
   const [pendingDragId, setPendingDragId] = useState<string | null>(null);
 
@@ -64,7 +64,34 @@ const TabsBar = () => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {tabs.map((tab, i) => (
+              {lockedTabs.map((tab, i) => (
+                <Draggable key={tab.id} draggableId={tab.id} index={i}
+								isDragDisabled={tab.isLocked}
+								>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+											onClick={() => onSelectTab(tab)}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      onTouchStart={(e) => handleTouchStart(e, tab.id)}
+                      onTouchEnd={handleTouchEnd}
+                      onTouchMove={handleTouchMove}
+                    >
+                      <Tab
+												tab={tab}
+                        isDragging={snapshot.isDragging}
+                        showText
+                        tooltip={i === 3}
+                        text={tab.title}
+                        selected={selectedTab?.id === tab.id}
+												isLocked={tab.isLocked}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+							{tabs.map((tab, i) => (
                 <Draggable key={tab.id} draggableId={tab.id} index={i}
 								isDragDisabled={tab.isLocked}
 								>

@@ -8,8 +8,9 @@ export interface Tab {
 }
 
 interface InitialState {
-	tabs: Tab[]
-	selectedTab: Tab
+	tabs: Tab[];
+	lockedTabs: Tab[];
+	selectedTab: Tab;
 }
 
 const initialState: InitialState = {
@@ -22,7 +23,7 @@ const initialState: InitialState = {
 		{ id: "5", title: "Statistik", isLocked: false, showTitle: true },
 		{ id: "6", title: "Post Office", isLocked: false, showTitle: true },
 		{ id: "7", title: "Administration", isLocked: false, showTitle: true },
-		{ id: "8", title: "Help", isLocked: true, showTitle: true },
+		{ id: "8", title: "Help", isLocked: false, showTitle: true },
 		{ id: "9", title: "Warenbestand", isLocked: false, showTitle: true },
 		{ id: "10", title: "Auswahllisten", isLocked: false, showTitle: true },
 		{ id: "11", title: "Einkauf", isLocked: false, showTitle: true },
@@ -33,6 +34,7 @@ const initialState: InitialState = {
 		{ id: "16", title: "Telefonie", isLocked: false, showTitle: true },
 		{ id: "17", title: "Accounting", isLocked: false, showTitle: true }
 	],
+	lockedTabs: [],
 	selectedTab: {
 		id:"",
 		isLocked: false,
@@ -52,10 +54,24 @@ export const tabsSlice = createSlice({
       state.selectedTab = action.payload;
     },
     lockTab: (state, action: PayloadAction<Tab>) => {
-      state.tabs.forEach((tab) => tab.id === action?.payload?.id && (tab.isLocked = true));
+			const lockedTab = state.tabs.find((tab) => tab.id === action.payload.id)
+			const filtredTabs = state.tabs.filter((tab) => tab.id !== action.payload.id)
+
+			if(lockedTab) {
+				lockedTab.isLocked = true
+				state.lockedTabs.push(lockedTab);
+			}
+			state.tabs = filtredTabs;
     },
 		unlockTab: (state, action: PayloadAction<Tab>) => {
-      state.tabs.forEach((tab) => tab.id === action?.payload?.id && (tab.isLocked = false));
+      const unlockedTab = state.lockedTabs.find((tab) => tab.id === action.payload.id)
+			const filtredLockedTabs = state.lockedTabs.filter((tab) => tab.id !== action.payload.id)
+
+			if(unlockedTab) {
+				unlockedTab.isLocked = false
+				state.tabs.unshift(unlockedTab);
+			}
+			state.lockedTabs = filtredLockedTabs;
     },
   },
 });
