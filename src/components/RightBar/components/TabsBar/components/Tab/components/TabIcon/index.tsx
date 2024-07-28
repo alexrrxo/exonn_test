@@ -1,15 +1,18 @@
 import React, { FC } from 'react'
 import {ReactComponent as Bank} from "../../../../../../../../icons/apps.svg"
+import Icons, { IconNameType } from "../../../../../../../IconComponent";
 
 interface Props {
 	showText: boolean;
+	name: IconNameType;
+	color?: string;
 }
 
-const TabIcon: FC<Props> = ({showText}) => {
+const TabIcon: FC<Props> = ({showText, name, color}) => {
 	return (
 		<div style={{marginRight: showText ? 10 : 0, height: 20}}>
 			<div>
-				<Bank width={16} height={16} color="red" />
+				<Icons name={name} color={color} />
 			</div>
 		</div>
 	)

@@ -8,15 +8,12 @@ import { lockTab, Tab as TabType, unlockTab } from "../../../../../../redux/slic
 
 interface Props {
 	tab: TabType;
-	showText: boolean;
 	selected?: boolean;
-	text: string;
 	tooltip?: boolean;
 	isDragging?: boolean
-	isLocked?: boolean;
 }
 
-const Tab: FC<Props> = ({ tab, isLocked = false, isDragging = false, tooltip = false, showText = true, selected = false, text }) => {
+const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = false }) => {
 	const bgcolor = useMemo(() => {
 		const draggingColor = "#7F858D"
 		const selectedColor = "#F4F7F9"
@@ -42,13 +39,13 @@ const Tab: FC<Props> = ({ tab, isLocked = false, isDragging = false, tooltip = f
 		const selectedColor = "#4690E2"
 		const unselectedColor = "transparent"
 
-		if(isLocked) return lockedColor;
+		if(tab.isLocked) return lockedColor;
 		if(isDragging) return unselectedColor
 
 		if(selected) return selectedColor;
 
 		return unselectedColor;
-	}, [selected, isDragging, isLocked])
+	}, [selected, isDragging, tab.isLocked])
 
 	const dispatch = useTypedDispatch();
 
@@ -64,16 +61,16 @@ const Tab: FC<Props> = ({ tab, isLocked = false, isDragging = false, tooltip = f
 		tooltip ? 
 			<CustomTooltipComponent>
 				<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler}> 
-					<TabIcon showText={showText} />
-					{showText && <TabText text={text} textcolor={textcolor} />}
-					{isLocked && <button onClick={unlockTabHandler}>X</button>}
+					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon} />
+					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
+					{tab.isLocked && <button onClick={unlockTabHandler}>X</button>}
 				</Root>
 			</CustomTooltipComponent> 
 			: 
 			<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler}> 
-				<TabIcon showText={showText} />
-				{showText && <TabText text={text} textcolor={textcolor} />}
-				{isLocked && <button onClick={unlockTabHandler}>X</button>}
+				<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon}/>
+				{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
+				{tab.isLocked && <button onClick={unlockTabHandler}>X</button>}
 			</Root>
 	)
 }

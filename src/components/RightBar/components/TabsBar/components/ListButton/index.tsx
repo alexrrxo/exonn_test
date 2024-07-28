@@ -1,9 +1,9 @@
-import {ReactComponent as Arrow} from "../../../../../../icons/down-arrow.svg"
 import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import Root from "./components/Root";
 import Tab from "../Tab";
 import styled from "styled-components";
+import Icons from "../../../../../IconComponent";
 
 const CustomMenu = styled(Menu)(({ theme }) => ({
   '& .MuiMenu-root': {
@@ -24,7 +24,7 @@ export default function ListButton() {
   return (
     <div>
       <Root onClick={handleClick}>
-    		<Arrow />
+    		<Icons name={anchorEl ? "up-arrow" : "down-arrow"} color={open ? "black" : "#FFF"} />
     	</Root>
       <CustomMenu
         id="basic-menu"
@@ -37,9 +37,9 @@ export default function ListButton() {
 				marginThreshold={0}
 				
       >
-        <Tab tab={{} as any} showText text="123123232" />
-        <Tab tab={{} as any} showText text="123123232" />
-        <Tab tab={{} as any} showText text="123123232" />
+        <Tab tab={{} as any} />
+        <Tab tab={{} as any} />
+        <Tab tab={{} as any} />
       </CustomMenu>
     </div>
   );

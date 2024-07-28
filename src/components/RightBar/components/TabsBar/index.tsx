@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from 'react-beautiful-dnd';
 import Root from "./components/Root";
 import Tab from "./components/Tab";
@@ -68,8 +68,18 @@ const TabsBar = () => {
 
 	// isDragDisabled={pendingDragId !== tab.id}
 
+	const lineRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+
+		setTimeout(() => {
+			console.log("lineref", lineRef.current?.children[1].children[0].clientWidth)
+
+		}, 300)
+	}, [])
+
   return (
-    <Root>
+    <Root ref={lineRef}>
 			<DragDropContext onDragEnd={onDragEndLocked}>
         <Droppable direction="horizontal" droppableId="droppable-0">
           {(provided) => (
@@ -94,11 +104,8 @@ const TabsBar = () => {
                       <Tab
 												tab={tab}
                         isDragging={snapshot.isDragging}
-                        showText
                         tooltip={i === 3}
-                        text={tab.title}
                         selected={selectedTab?.id === tab.id}
-												isLocked={tab.isLocked}
                       />
                     </div>
                   )}
@@ -133,11 +140,8 @@ const TabsBar = () => {
                       <Tab
 												tab={tab}
                         isDragging={snapshot.isDragging}
-                        showText
                         tooltip={i === 3}
-                        text={tab.title}
                         selected={selectedTab?.id === tab.id}
-												isLocked={tab.isLocked}
                       />
                     </div>
                   )}
