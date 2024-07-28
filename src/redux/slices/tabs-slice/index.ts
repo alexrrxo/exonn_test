@@ -12,13 +12,12 @@ export interface Tab {
 interface InitialState {
 	tabs: Tab[];
 	lockedTabs: Tab[];
+	visibleTabsIds: (string | undefined)[]
 	selectedTab: Tab;
 }
 
 const initialState: InitialState = {
   tabs: [
-		{ id: "0", title: "Dashboard", isLocked: false, showTitle: true, icon: "apps" },
-		{ id: "1", title: "Banking", isLocked: false, showTitle: true, icon: "bank" },
 		{ id: "2", title: "Telefonie", isLocked: false, showTitle: true, icon: "phone-call" },
 		{ id: "3", title: "Accounting", isLocked: false, showTitle: true, icon: "user-add" },
 		{ id: "4", title: "Verkauf", isLocked: false, showTitle: true, icon: "shop" },
@@ -36,7 +35,11 @@ const initialState: InitialState = {
 		{ id: "16", title: "Telefonie", isLocked: false, showTitle: true, icon: "phone-call"  },
 		{ id: "17", title: "Accounting", isLocked: false, showTitle: true, icon: "user-add" }
 	],
-	lockedTabs: [],
+	lockedTabs: [
+		{ id: "0", title: "Dashboard", isLocked: true, showTitle: true, icon: "apps" },
+		{ id: "1", title: "Banking", isLocked: true, showTitle: true, icon: "bank" },
+	],
+	visibleTabsIds: [],
 	selectedTab: {
 		id:"",
 		isLocked: false,
@@ -79,9 +82,12 @@ export const tabsSlice = createSlice({
 			}
 			state.lockedTabs = filtredLockedTabs;
     },
+		setVisibleTabIds: (state, action: PayloadAction<(string | undefined)[]>) => {
+			state.visibleTabsIds = action.payload
+		}
   },
 });
 
-export const { setUnlockedTabs, setLockedTabs, selectTab, lockTab, unlockTab } = tabsSlice.actions;
+export const { setUnlockedTabs, setLockedTabs, setVisibleTabIds, selectTab, lockTab, unlockTab } = tabsSlice.actions;
 
 export default tabsSlice.reducer;

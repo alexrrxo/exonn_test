@@ -5,11 +5,11 @@ import Tab from "./components/Tab";
 import Button from "./components/ListButton";
 import TabsContainer from "./components/TabsContainer";
 import { useTypedDispatch, useTypedSelector } from "../../../../redux/store";
-import { setUnlockedTabs, selectTab, Tab as TabType, setLockedTabs } from "../../../../redux/slices/tabs-slice";
+import { setUnlockedTabs, selectTab, Tab as TabType, setLockedTabs, setVisibleTabIds } from "../../../../redux/slices/tabs-slice";
 
 const TabsBar = () => {
 	const dispatch = useTypedDispatch()
-	const {tabs, lockedTabs, selectedTab} = useTypedSelector(state => state.tabs);
+	const {tabs, lockedTabs, visibleTabsIds, selectedTab} = useTypedSelector(state => state.tabs);
 
   const [pendingDragId, setPendingDragId] = useState<string | null>(null);
 
@@ -69,14 +69,41 @@ const TabsBar = () => {
 	// isDragDisabled={pendingDragId !== tab.id}
 
 	const lineRef = useRef<HTMLDivElement>(null)
+	const [isShowList, setIsShowList] = useState(false);
 
 	useEffect(() => {
+		lineRef.current?.children[1]?.scrollTo({
+			left: 0,
+		})
 
-		setTimeout(() => {
-			console.log("lineref", lineRef.current?.children[1].children[0].clientWidth)
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const visibleEntries = entries.filter(entry => entry.isIntersecting);
 
-		}, 300)
-	}, [])
+				const visibleTabsIds = visibleEntries.map((entry) => entry.target?.attributes.getNamedItem("data-rbd-draggable-id")?.value);
+
+				dispatch(setVisibleTabIds(visibleTabsIds));
+			},
+			{
+				root: lineRef.current?.children[1],
+				threshold: 0.1 
+			}
+		);
+
+		if(isShowList) {
+			const items = lineRef?.current?.children[1]?.childNodes;
+			items?.forEach((item: any) => observer.observe(item));
+		}
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isShowList, tabs, pendingDragId]);
+
+  useEffect(() => {
+    console.log("visibleTabsIds", visibleTabsIds)
+  }, [visibleTabsIds]);
+
 
   return (
     <Root ref={lineRef}>
@@ -122,6 +149,7 @@ const TabsBar = () => {
             <TabsContainer
               {...provided.droppableProps}
               ref={provided.innerRef}
+							hideScroll={isShowList}
             >
 							{tabs.map((tab, i) => (
                 <Draggable key={tab.id} draggableId={tab.id} index={i}
@@ -152,7 +180,7 @@ const TabsBar = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <Button />
+      <Button open={isShowList} onChange={setIsShowList} />
     </Root>
   );
 };

@@ -10,6 +10,8 @@ const Root = styled.div<Props>`
 
 	padding: 15px 20px;
 
+	padding-right: 0px;
+
 	height: 48px;
 
 	display: flex;

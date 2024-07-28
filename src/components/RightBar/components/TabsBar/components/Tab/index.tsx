@@ -1,10 +1,11 @@
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import Root from "./components/Root"
 import TabText from "./components/TabText"
 import TabIcon from "./components/TabIcon";
 import CustomTooltipComponent from "../Tooltip";
 import { useTypedDispatch } from "../../../../../../redux/store";
 import { lockTab, Tab as TabType, unlockTab } from "../../../../../../redux/slices/tabs-slice";
+import CloseButton from "./components/CloseButton";
 
 interface Props {
 	tab: TabType;
@@ -57,20 +58,30 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 		dispatch(lockTab(tab))
 	}, [dispatch])
 
+	const [showClose, setShoweClose] = useState(false)
+
+	const onShowClose = useCallback(() => {
+		setShoweClose(true);
+	}, [setShoweClose])
+
+	const onHideClose = useCallback(() => {
+		setShoweClose(false);
+	}, [setShoweClose])
+
 	return (
 		tooltip ? 
 			<CustomTooltipComponent>
-				<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler}> 
+				<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
 					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon} />
 					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
-					{tab.isLocked && <button onClick={unlockTabHandler}>X</button>}
+					{(tab.isLocked && showClose) && <CloseButton color="gray" onClose={unlockTabHandler} />}
 				</Root>
 			</CustomTooltipComponent> 
 			: 
-			<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler}> 
+			<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
 				<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon}/>
 				{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
-				{tab.isLocked && <button onClick={unlockTabHandler}>X</button>}
+				{(tab.isLocked && showClose) && <CloseButton color="gray" onClose={unlockTabHandler} />}
 			</Root>
 	)
 }

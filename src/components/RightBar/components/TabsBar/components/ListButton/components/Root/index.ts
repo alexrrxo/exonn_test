@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-const Root = styled.button`
+interface Props {
+	active?: boolean;
+}
+const Root = styled.button<Props>`
 	padding: 21px 11px;
 
 	display: flex;
@@ -9,7 +12,7 @@ const Root = styled.button`
 
 	border: none;
 
-	background-color: #4690E2;
+	background-color: ${props => props.active ? "#4690E2" : "#FFFFFF"};
 
 	cursor: pointer;
 `;

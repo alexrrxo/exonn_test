@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-const TabsContainer = styled.div`
+interface Props {
+	hideScroll?: boolean;
+}
+const TabsContainer = styled.div<Props>`
 	position: relative;
 
 	width: 100%;
@@ -10,10 +13,10 @@ const TabsContainer = styled.div`
 	justify-content: flex-start;
 	align-items: center;
 
-	overflow-x: auto;
+	overflow-x: ${props => props.hideScroll ? "hidden" : "auto"};
 	white-space: nowrap;
 
-	background-color: #FFF;
+	background-color: #F1F5F8;
 
 	overflow-y: hidden;
 
