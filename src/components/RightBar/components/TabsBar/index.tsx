@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from 'react-beautiful-dnd';
 import Root from "./components/Root";
 import Tab from "./components/Tab";
@@ -12,11 +12,13 @@ const TabsBar = () => {
 	const {tabs, lockedTabs, visibleTabsIds, selectedTab} = useTypedSelector(state => state.tabs);
 
   const [pendingDragId, setPendingDragId] = useState<string | null>(null);
-
 	
   const timeoutRef = useRef<any>(null);
 
+	const [canUpdateTabsIds, setCanUpdateTabsIds] = useState(true)
+
   const onDragEndLocked = (result: DropResult) => {
+		setCanUpdateTabsIds(true)
     clearTimeout(timeoutRef.current);
     setPendingDragId(null);
 
@@ -30,6 +32,7 @@ const TabsBar = () => {
   };
 
   const onDragEndUnlocked = (result: DropResult) => {
+		setCanUpdateTabsIds(true)
     clearTimeout(timeoutRef.current);
     setPendingDragId(null);
 
@@ -72,17 +75,20 @@ const TabsBar = () => {
 	const [isShowList, setIsShowList] = useState(false);
 
 	useEffect(() => {
-		lineRef.current?.children[1]?.scrollTo({
-			left: 0,
-		})
-
 		const observer = new IntersectionObserver(
 			(entries) => {
 				const visibleEntries = entries.filter(entry => entry.isIntersecting);
 
 				const visibleTabsIds = visibleEntries.map((entry) => entry.target?.attributes.getNamedItem("data-rbd-draggable-id")?.value);
 
-				dispatch(setVisibleTabIds(visibleTabsIds));
+				
+				console.log("canUpdateTabsIds", canUpdateTabsIds)
+				console.log("visibleTabsIds", visibleTabsIds)
+
+				if(isShowList && canUpdateTabsIds) {
+					console.log("visibleTabsIds", visibleTabsIds)
+					dispatch(setVisibleTabIds(visibleTabsIds));
+				}
 			},
 			{
 				root: lineRef.current?.children[1],
@@ -91,6 +97,10 @@ const TabsBar = () => {
 		);
 
 		if(isShowList) {
+			lineRef.current?.children[1]?.scrollTo({
+				left: 0,
+			})
+
 			const items = lineRef?.current?.children[1]?.childNodes;
 			items?.forEach((item: any) => observer.observe(item));
 		}
@@ -98,16 +108,17 @@ const TabsBar = () => {
     return () => {
       observer.disconnect();
     };
-  }, [isShowList, tabs, pendingDragId]);
+  }, [isShowList, tabs, pendingDragId, lineRef, lockedTabs, canUpdateTabsIds]);
 
-  useEffect(() => {
-    console.log("visibleTabsIds", visibleTabsIds)
-  }, [visibleTabsIds]);
+	const tabList = useMemo(() => isShowList ? tabs.filter((tab) => !visibleTabsIds.includes(tab.id)) : tabs, [isShowList, tabs, visibleTabsIds])
 
+	const onDragStart = useCallback(() => {
+		setCanUpdateTabsIds(false)
+	}, []);
 
   return (
     <Root ref={lineRef}>
-			<DragDropContext onDragEnd={onDragEndLocked}>
+			<DragDropContext onDragEnd={onDragEndLocked} onBeforeDragStart={onDragStart}>
         <Droppable direction="horizontal" droppableId="droppable-0">
           {(provided) => (
             <TabsContainer
@@ -143,7 +154,7 @@ const TabsBar = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <DragDropContext onDragEnd={onDragEndUnlocked}>
+      <DragDropContext onDragEnd={onDragEndUnlocked} onBeforeDragStart={onDragStart}>
         <Droppable direction="horizontal" droppableId="droppable-1">
           {(provided) => (
             <TabsContainer

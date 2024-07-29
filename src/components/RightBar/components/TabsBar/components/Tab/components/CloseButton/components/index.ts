@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-const Root = styled.div`
+interface Props {
+	visible: boolean;
+}
+const Root = styled.div<Props>`
 	width: 34px;
 	height: 100%;
 
@@ -8,6 +11,8 @@ const Root = styled.div`
 	justify-content: center;
 	align-items: center;
 	
+	opacity: ${props => props.visible ? "1" : "0"};
+
 	background-color: transparent;
 `;
 

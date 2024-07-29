@@ -74,14 +74,14 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 				<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
 					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon} />
 					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
-					{(tab.isLocked && showClose) && <CloseButton color="gray" onClose={unlockTabHandler} />}
+					{tab.isLocked && <CloseButton color="gray" visible={showClose} onClose={unlockTabHandler} />}
 				</Root>
 			</CustomTooltipComponent> 
 			: 
 			<Root bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
 				<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon}/>
 				{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
-				{(tab.isLocked && showClose) && <CloseButton color="gray" onClose={unlockTabHandler} />}
+				{tab.isLocked && <CloseButton color="gray" visible={showClose} onClose={unlockTabHandler} />}
 			</Root>
 	)
 }

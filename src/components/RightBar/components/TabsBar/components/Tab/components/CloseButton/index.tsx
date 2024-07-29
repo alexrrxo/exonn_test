@@ -3,11 +3,12 @@ import Root from "./components";
 import Icons from "../../../../../../../IconComponent";
 
 interface Props {
+	visible: boolean;
 	color: string;
 	onClose: () => void;
 }
 
-const CloseButton: FC<Props> = ({onClose, color}) => {
+const CloseButton: FC<Props> = ({onClose, color, visible}) => {
 	const [isHovered, setIsHovered] = useState(false);
 
 	const onHover = useCallback(() => {
@@ -19,7 +20,7 @@ const CloseButton: FC<Props> = ({onClose, color}) => {
 	},[setIsHovered])
 
 	return (
-		<Root onClick={onClose} onMouseEnter={onHover} onMouseLeave={onUnhover}>
+		<Root visible={visible} onClick={onClose} onMouseEnter={onHover} onMouseLeave={onUnhover}>
 			<Icons name="close" color={isHovered ? "#EE3F3E" : color} />
 		</Root>
 	)
