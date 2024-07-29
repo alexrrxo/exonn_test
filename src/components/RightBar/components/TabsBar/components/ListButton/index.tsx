@@ -1,27 +1,23 @@
-import * as React from 'react';
+import React,{ useEffect } from 'react';
 import Menu from '@mui/material/Menu';
 import Root from "./components/Root";
-import Tab from "../Tab";
+import Tab from "./components/Tab";
 import styled from "styled-components";
 import Icons from "../../../../../IconComponent";
 import { useTypedSelector } from "../../../../../../redux/store";
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { useTypedDispatch } from "../../../../../../redux/store";
-import { setUnlockedTabs, setVisibleTabIds, Tab as TabType } from "../../../../../../redux/slices/tabs-slice";
-
-const CustomMenu = styled(Menu)(({ theme }) => ({
-  pointerEvents: "none",
-  '& .MuiMenu-root': {
-    marginRight: 0,
-  },
-}));
+import { setUnlockedTabs, Tab as TabType } from "../../../../../../redux/slices/tabs-slice";
+import Space from "./components/Space";
+import TabsContainer from "./components/TabsContainer";
 
 interface Props {
   open: boolean;
   onChange: React.Dispatch<React.SetStateAction<boolean>>;
+	onSelectTab: (tab: TabType) => void;
 }
 
-const ListButton: React.FC<Props> = ({ open, onChange }) => {
+const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
   const dispatch = useTypedDispatch();
   const { tabs, visibleTabsIds, selectedTab } = useTypedSelector(state => state.tabs);
 
@@ -42,32 +38,73 @@ const ListButton: React.FC<Props> = ({ open, onChange }) => {
 
   const listTabs = React.useMemo(() => tabs.filter((tab) => !visibleTabsIds.includes(tab.id)), [tabs, visibleTabsIds]);
 
+  const onDragEnd = (result: DropResult) => {
+		if (!result.destination) return;
+	
+		const newTabs = Array.from(listTabs);
+	
+		const [removed] = newTabs.splice(result.source.index, 1);
+		newTabs.splice(result.destination.index, 0, removed);
+	
+		const firstTabs = tabs.filter((tab) => visibleTabsIds.includes(tab.id));
+	
+		const data = [...firstTabs, ...newTabs];
+	
+		dispatch(setUnlockedTabs(data));
+	};
+
+	useEffect(() => {
+		if(!open) {
+			setAnchorEl(null)
+		}
+	}, [open])
+
   return (
     <div>
       <Root onClick={handleClick} active={open}>
         <Icons name={anchorEl ? "up-arrow" : "down-arrow"} color={open ? "#FFF" : "black"} />
       </Root>
-			
-					<CustomMenu
-						id="basic-menu"
-						anchorEl={anchorEl}
-						open={open}
-						onClose={handleClose}
-						MenuListProps={{
-							'aria-labelledby': 'basic-button',
-						}}
-						marginThreshold={0}
-					>
-						{listTabs.map((tab, i) => (
-							<Tab
-								tab={tab}
-								isDragging={false}
-								tooltip={false}
-								selected={selectedTab?.id === tab.id}
-							/>
-						))}
-					</CustomMenu>
+			{!open && <Space />}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          marginThreshold={0}
+        >
+          <Droppable droppableId="droppable-list-button">
+            {(provided) => (
+              <TabsContainer ref={provided.innerRef} {...provided.droppableProps}>
+                {listTabs.map((tab, i) => (
+                  <Draggable key={tab.id} draggableId={tab.id} index={i}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+												onClick={() => onSelectTab(tab)}
+                      >
+                        <Tab
+                          tab={tab}
+                          isDragging={snapshot.isDragging}
+                          selected={selectedTab?.id === tab.id}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </TabsContainer>
+            )}
+          </Droppable>
+        </Menu>
+      </DragDropContext>
     </div>
   );
 };
+
 export default ListButton;

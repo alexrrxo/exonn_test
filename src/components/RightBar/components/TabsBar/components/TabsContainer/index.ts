@@ -20,6 +20,19 @@ const TabsContainer = styled.div<Props>`
 
 	overflow-y: hidden;
 
+	& > div:not(:last-child) > * > * {
+		& :before {
+			content: '';
+			position: absolute;
+			right: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			height: 10px;
+			width: 0; 
+			border-left: 1px solid #AEB6CE33;
+  	}
+	}
+
 &::-webkit-scrollbar {
   height: 8px;
 }
@@ -37,17 +50,6 @@ const TabsContainer = styled.div<Props>`
 &::-webkit-scrollbar-thumb:hover {
     background: #a0a4a8;
 }
-
-& > div:not(:first-child)::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 10px;
-    width: 0; 
-    border-left: 1px solid #AEB6CE33;
-  }
 `;
 
 export default TabsContainer;

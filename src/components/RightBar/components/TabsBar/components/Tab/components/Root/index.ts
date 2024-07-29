@@ -20,14 +20,15 @@ const Root = styled.div<Props>`
 	align-items: center;
 
 	background-color: ${props => props.bgcolor};
-	border-radius: 6px;
 
 	cursor: pointer;
+
+	border-bottom: 1px solid #AEB6CE33;
 		
 	&::before {
 		content: "";
 		position: absolute;
-		top: 4px;
+		top: 0px;
 		left: 0;
 		width: 100%;
 		height: 2px;

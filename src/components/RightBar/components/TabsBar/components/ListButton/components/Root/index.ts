@@ -4,7 +4,7 @@ interface Props {
 	active?: boolean;
 }
 const Root = styled.button<Props>`
-	padding: 21px 11px;
+	padding: 20.7px 11px;
 
 	display: flex;
 	justify-content: center;
@@ -13,6 +13,7 @@ const Root = styled.button<Props>`
 	border: none;
 
 	background-color: ${props => props.active ? "#4690E2" : "#FFFFFF"};
+	border-bottom: 1px solid #AEB6CE33;
 
 	cursor: pointer;
 `;

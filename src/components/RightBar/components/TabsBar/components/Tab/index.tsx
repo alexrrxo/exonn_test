@@ -1,11 +1,13 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { FC, MouseEvent, useCallback, useMemo, useState } from 'react'
 import Root from "./components/Root"
 import TabText from "./components/TabText"
 import TabIcon from "./components/TabIcon";
 import CustomTooltipComponent from "../Tooltip";
 import { useTypedDispatch } from "../../../../../../redux/store";
-import { lockTab, Tab as TabType, unlockTab } from "../../../../../../redux/slices/tabs-slice";
-import CloseButton from "./components/CloseButton";
+import { lockTab, selectTab, Tab as TabType, unlockTab } from "../../../../../../redux/slices/tabs-slice";
+import CloseButton from "../../../../../CloseButton";
+import { Menu } from "@mui/material";
+import ContextMenu from "./components/ContextMenu";
 
 interface Props {
 	tab: TabType;
@@ -15,6 +17,20 @@ interface Props {
 }
 
 const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = false }) => {
+	const dipatch = useTypedDispatch()
+
+	const [anchorPosition, setAnchorPosition] = useState<null | { top: number, left: number }>(null);
+
+  const handleRightClick = (event: MouseEvent<HTMLDivElement>, tab: TabType) => {
+    event.preventDefault();
+    setAnchorPosition({ top: event.clientY + 15, left: event.clientX + 10 });
+		dipatch(selectTab(tab))
+  };
+
+  const handleClose = () => {
+    setAnchorPosition(null);
+  };
+
 	const bgcolor = useMemo(() => {
 		const draggingColor = "#7F858D"
 		const selectedColor = "#F4F7F9"
@@ -68,21 +84,50 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 		setShoweClose(false);
 	}, [setShoweClose])
 
+	const handleClick = useCallback((tab: TabType) => {
+		if(tab.isLocked) {
+			dispatch(unlockTab(tab))
+		} else {
+			dispatch(lockTab(tab))
+		}
+	}, [tab])
+
 	return (
 		tooltip ? 
-			<CustomTooltipComponent>
-				<Root rightPadding={tab.isLocked} bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
+			<CustomTooltipComponent >
+				<div>
+				<Root onContextMenu={(e) => handleRightClick(e, tab)} rightPadding={tab.isLocked} bgcolor={bgcolor} linecolor={linecolor} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
 					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon} />
 					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
 					{tab.isLocked && <CloseButton color="gray" visible={showClose} onClose={unlockTabHandler} />}
 				</Root>
+					<Menu
+						open={Boolean(anchorPosition)}
+						anchorReference="anchorPosition"
+						anchorPosition={anchorPosition ? { top: anchorPosition.top, left: anchorPosition.left } : undefined}
+						onClose={handleClose}
+					>
+						<ContextMenu onClick={handleClick} tab={tab}/>
+					</Menu>
+				</div>
 			</CustomTooltipComponent> 
-			: 
-			<Root rightPadding={tab.isLocked} bgcolor={bgcolor} linecolor={linecolor} onDoubleClick={lockTabHandler} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
-				<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon}/>
-				{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
-				{tab.isLocked && <CloseButton color="gray" visible={showClose} onClose={unlockTabHandler} />}
-			</Root>
+			:
+			<div>
+				<Root rightPadding={tab.isLocked} bgcolor={bgcolor} linecolor={linecolor} onContextMenu={(e) => handleRightClick(e, tab)} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
+					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon}/>
+					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
+					{tab.isLocked && <CloseButton color="gray" visible={showClose} onClose={unlockTabHandler} />}
+				</Root>
+				<Menu
+					open={Boolean(anchorPosition)}
+					anchorReference="anchorPosition"
+					anchorPosition={anchorPosition ? { top: anchorPosition.top, left: anchorPosition.left } : undefined}
+					onClose={handleClose}
+					style={{boxShadow: "none"}}
+     		 >
+        	<ContextMenu onClick={handleClick} tab={tab} />
+      	</Menu>
+			</div>
 	)
 }
 

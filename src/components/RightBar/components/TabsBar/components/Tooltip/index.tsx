@@ -2,7 +2,6 @@ import React, { ReactElement, FC } from 'react';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/system';
 
-// Создаем стилизованный компонент Tooltip
 const CustomTooltip = styled(({ className, ...props }: TooltipProps & { className?: string }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -15,7 +14,7 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps & { classNam
 		borderRadius: "6px"
   },
   [`& .${tooltipClasses.arrow}`]: {
-    color: '#f0f0f0', // Цвет стрелки
+    color: '#f0f0f0',
   },
 }));
 
