@@ -3,6 +3,7 @@ import styled from "styled-components";
 interface Props {
 	bgcolor?: string;
 	linecolor?: string;
+	rightPadding?: boolean;
 }
 
 const Root = styled.div<Props>`
@@ -10,7 +11,7 @@ const Root = styled.div<Props>`
 
 	padding: 15px 20px;
 
-	padding-right: 0px;
+	padding-right: ${props => !props.rightPadding ? "15px" : "0px"};
 
 	height: 48px;
 
