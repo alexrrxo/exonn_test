@@ -1,4 +1,4 @@
-import React,{ useEffect } from 'react';
+import React,{ useCallback, useEffect, useMemo } from 'react';
 import Menu from '@mui/material/Menu';
 import Root from "./components/Root";
 import Tab from "./components/Tab";
@@ -10,6 +10,9 @@ import { useTypedDispatch } from "../../../../../../redux/store";
 import { setTabs, TabI } from "../../../../../../redux/slices/tabs-slice";
 import Space from "./components/Space";
 import TabsContainer from "./components/TabsContainer";
+import { theme } from "../../../../../../utils";
+import CustomMenu from "./components/CustomMenu";
+import { Link } from "react-router-dom";
 
 interface Props {
   open: boolean;
@@ -22,36 +25,36 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
   const { tabs, visibleTabsIds, selectedTab } = useTypedSelector(state => state.tabs);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (anchorEl) {
-      setAnchorEl(null);
-      onChange(false);
-    } else {
-      setAnchorEl(event.currentTarget);
-      onChange(true);
-    }
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-    onChange(false);
-  };
 
-  const listTabs = React.useMemo(() => tabs.filter((tab) => !visibleTabsIds.includes(tab.id)), [tabs, visibleTabsIds]);
+	const listTabs = useMemo(() => tabs.filter((tab) => !visibleTabsIds.includes(tab.id)), [tabs, visibleTabsIds]);
 
-  const onDragEnd = (result: DropResult) => {
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+		if (anchorEl) {
+			setAnchorEl(null);
+			onChange(false);
+		} else {
+			setAnchorEl(event.currentTarget);
+			onChange(true);
+		}
+	}, [anchorEl, onChange]);
+	
+	const handleClose = useCallback(() => {
+		setAnchorEl(null);
+		onChange(false);
+	}, [onChange]);
+	
+	const onDragEnd = useCallback((result: DropResult) => {
 		if (!result.destination) return;
 	
 		const newTabs = Array.from(listTabs);
-	
 		const [removed] = newTabs.splice(result.source.index, 1);
 		newTabs.splice(result.destination.index, 0, removed);
 	
 		const firstTabs = tabs.filter((tab) => visibleTabsIds.includes(tab.id));
-	
 		const data = [...firstTabs, ...newTabs];
 	
 		dispatch(setTabs(data));
-	};
+	}, [listTabs, tabs, visibleTabsIds, dispatch]);
 
 	useEffect(() => {
 		if(!open) {
@@ -62,11 +65,11 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
   return (
     <div>
       <Root onClick={handleClick} active={open}>
-        <Icons name={anchorEl ? "up-arrow" : "down-arrow"} color={open ? "#FFF" : "black"} />
+        <Icons name={anchorEl ? "up-arrow" : "down-arrow"} color={open ? theme.primaryWhite : theme.primaryBlack} />
       </Root>
 			{!open && <Space />}
       <DragDropContext onDragEnd={onDragEnd}>
-        <Menu
+        <CustomMenu
           id="basic-menu"
           anchorEl={anchorEl}
           open={open}
@@ -88,11 +91,13 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
                         {...provided.dragHandleProps}
 												onClick={() => onSelectTab(tab)}
                       >
-                        <Tab
-                          tab={tab}
-                          isDragging={snapshot.isDragging}
-                          selected={selectedTab?.id === tab.id}
-                        />
+												<Link to={tab.title}>
+													<Tab
+														tab={tab}
+														isDragging={snapshot.isDragging}
+														selected={selectedTab?.id === tab.id}
+													/>
+												</Link>
                       </div>
                     )}
                   </Draggable>
@@ -101,7 +106,7 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
               </TabsContainer>
             )}
           </Droppable>
-        </Menu>
+        </CustomMenu>
       </DragDropContext>
     </div>
   );

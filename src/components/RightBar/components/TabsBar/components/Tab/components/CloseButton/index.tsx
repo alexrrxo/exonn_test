@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useState } from 'react'
 import Root from "./components";
 import Icons from "../../../../../../../IconComponent";
+import { theme } from "../../../../../../../../utils";
 
 interface Props {
 	visible: boolean;
@@ -21,7 +22,7 @@ const CloseButton: FC<Props> = ({onClose, color, visible}) => {
 
 	return (
 		<Root visible={visible} onClick={onClose} onMouseEnter={onHover} onMouseLeave={onUnhover}>
-			<Icons name="close" color={isHovered ? "#EE3F3E" : color} />
+			<Icons name="close" color={isHovered ? theme.primaryRed : color} />
 		</Root>
 	)
 }

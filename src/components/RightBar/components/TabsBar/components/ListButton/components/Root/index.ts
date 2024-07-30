@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../../../utils";
 
 interface Props {
 	active?: boolean;
@@ -12,8 +13,8 @@ const Root = styled.button<Props>`
 
 	border: none;
 
-	background-color: ${props => props.active ? "#4690E2" : "#FFFFFF"};
-	border-bottom: 1px solid #AEB6CE33;
+	background-color: ${props => props.active ? theme.primaryBlue : theme.secondaryWhite};
+	border-bottom: 1px solid ${theme.grayDivider};
 
 	cursor: pointer;
 `;

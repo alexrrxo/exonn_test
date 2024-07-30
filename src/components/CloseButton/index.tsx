@@ -1,14 +1,17 @@
 import React, { FC, useCallback, useState } from "react";
 import Root from "./components";
 import Icons from "../IconComponent";
+import { theme } from "../../utils";
 
 interface Props {
 	visible: boolean;
 	color: string;
 	onClose: () => void;
+	position?: string;
+	justifyContent?: string;
 }
 
-const CloseButton: FC<Props> = ({onClose, color, visible}) => {
+const CloseButton: FC<Props> = ({onClose, color, visible, position, justifyContent}) => {
 	const [isHovered, setIsHovered] = useState(false);
 
 	const onHover = useCallback(() => {
@@ -20,8 +23,8 @@ const CloseButton: FC<Props> = ({onClose, color, visible}) => {
 	},[setIsHovered])
 
 	return (
-		<Root visible={visible} onClick={onClose} onMouseEnter={onHover} onMouseLeave={onUnhover}>
-			<Icons name="close" color={isHovered ? "#EE3F3E" : color} />
+		<Root justifyContent={justifyContent} position={position} visible={visible} onClick={onClose} onMouseEnter={onHover} onMouseLeave={onUnhover}>
+			<Icons name="close" color={isHovered ? theme.primaryRed : color} />
 		</Root>
 	)
 }

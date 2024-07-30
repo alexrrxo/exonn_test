@@ -1,7 +1,15 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../../../../../utils";
 
-const Root = styled.div<{textcolor: string}>`
-	color: ${(props) => (props.textcolor || "#7F858D")};
+interface Props {
+	textcolor: string;
+	reduceWidth?: boolean;
+}
+
+const Root = styled.div<Props>`
+	color: ${(props) => (props.textcolor || theme.primaryGray)};
+
+	width: ${props => props.reduceWidth ? "calc(100% - 36px)" : "100%" };
 
 	font-family: Poppins;
 	font-size: 14px;

@@ -1,9 +1,10 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import Root from "./components/Root"
 import TabIcon from "./components/TabIcon"
 import TabText from "./components/TabText"
 import { TabI } from "../../../../../../../../redux/slices/tabs-slice"
 import CloseButton from "../../../../../../../CloseButton"
+import { theme } from "../../../../../../../../utils"
 
 interface Props {
 	tab: TabI;
@@ -12,46 +13,63 @@ interface Props {
 }
 
 const Tab: FC<Props> = ({ tab, isDragging = false, selected = false }) => {
-	const bgcolor = useMemo(() => {
-		const draggingColor = "#7F858D"
-		const selectedColor = "#FEFEFE"
-		const unselectedColor = "#FEFEFE"
+	const [isHovered, setIsHovered] = useState(false)
+
+	const onHover = useCallback(() => {
+		setIsHovered(true)
+	},[setIsHovered])
+
+	const onUnhover = useCallback(() => {
+		setIsHovered(false)
+	},[setIsHovered])
+
+	const bgColor = useMemo(() => {
+		const draggingColor = theme.primaryGray
+		const selectedColor = theme.secondaryWhite
+		const unselectedColor = theme.secondaryWhite
 
 		if(isDragging) return draggingColor
 		if(selected) return selectedColor
 		return unselectedColor
-	}, [isDragging, selected])
+	}, [isDragging, selected, isHovered])
 
 	const textcolor = useMemo(() => {
-		const draggingColor = "#FFF"
-		const selectedColor = "#4690E2"
-		const unselectedColor = "#7F858D"
-
+		const draggingColor = theme.primaryWhite
+		const selectedColor = theme.primaryBlue
+		const unselectedColor = theme.primaryGray
+		const hoveredColor = theme.primaryBlack
+		
 		if(isDragging) return draggingColor
 		if(selected) return selectedColor
+		if(isHovered) return hoveredColor
 		return unselectedColor
-	}, [isDragging, selected])
+	}, [isDragging, selected, isHovered])
 
 	const linecolor = useMemo(() => {
-		const lockedColor = "#7F858D"
-		const selectedColor = "#4690E2"
-		const unselectedColor = "transparent"
+		const lockedColor = theme.primaryGray
+		const selectedColor = theme.primaryBlue
+		const unselectedColor = theme.transparent
 
 		if(tab.isLocked) return lockedColor;
 		if(isDragging) return unselectedColor
-
 		if(selected) return selectedColor;
 
 		return unselectedColor;
 	}, [selected, isDragging, tab.isLocked])
 
 	return (
-		<Root isDragging={isDragging} bgcolor={bgcolor} linecolor={linecolor}> 
+		<Root
+			isDragging={isDragging}
+			bgColor={bgColor}
+			linecolor={linecolor}
+			onMouseEnter={onHover}
+			onMouseLeave={onUnhover}
+		> 
 				<div style={{display: "flex", justifyContent: "flex-start", alignItems: "center"}}>
-					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon}/>
-					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
+					<TabIcon showText color={textcolor} name={tab.icon}/>
+					<TabText text={tab.title} textcolor={textcolor} />
 				</div>
-				<CloseButton color="gray" visible={!isDragging} onClose={() => ""} />
+				<CloseButton justifyContent="flex-end" color={theme.primaryGray} visible={!isDragging} onClose={() => ""} />
 			</Root>
 	)
 }

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../utils";
 
 const Root = styled.div`
 	position: relative;
@@ -7,20 +8,22 @@ const Root = styled.div`
 	height: 100%;
 
 	display: grid;
-  grid-template-columns: auto 1fr 32px; 
+  grid-template-columns: auto 1fr 32px;
+
+	background-color: ${theme.thirdGray};
 
 &::-webkit-scrollbar {
   height: 8px;
 }
 
 &::-webkit-scrollbar-track {
-  background: #FEFEFE;
+  background: ${theme.secondaryWhite};
 }
 
 &::-webkit-scrollbar-thumb {
-	border: 2px solid #FEFEFE;
+	border: 2px solid ${theme.secondaryWhite};
   border-radius: 40px;
-  background-color: #7F858D66;
+  background-color: ${theme.primaryGray};
 }
 
 &::-webkit-scrollbar-thumb:hover {

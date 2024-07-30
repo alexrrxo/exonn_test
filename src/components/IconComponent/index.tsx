@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { theme } from "../../utils";
 
 export type IconNameType = "apps" | "bank" | "book" | "box" | "browser" | "cart-check" | "chart-pie" | "close" | "cube" | "down-arrow" | "list" | "mail" | "phone-call" | "pin" | "settings" | "shop" | "up-arrow" | "user-add";
 
@@ -7,7 +8,7 @@ interface Props {
 	color?: string;
 }
 
-const Icons: FC<Props> = ({ name = "close", color = "#7F858D" }) => {
+const Icons: FC<Props> = ({ name = "close", color = theme.primaryGray }) => {
     const icons = {
 				"apps": (
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

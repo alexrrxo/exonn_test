@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface Props {
-	bgcolor?: string;
+	bgColor?: string;
 	linecolor?: string;
 	isDragging?: boolean;
 }
@@ -21,7 +21,7 @@ const Root = styled.div<Props>`
 	justify-content: space-between;
 	align-items: center;
 
-	background-color: ${props => props.bgcolor};
+	background-color: ${props => props.bgColor};
 
 	cursor: pointer;
 `;

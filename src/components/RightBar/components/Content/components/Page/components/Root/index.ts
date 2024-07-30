@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../../../utils";
 
 const Root = styled.div`
 	width: 100%;
@@ -9,7 +10,7 @@ const Root = styled.div`
 	align-items: center;
 
 	border-radius: 6px;
-	background-color: #FFF;
+	background-color: ${theme.primaryWhite};
 `;
 
 export default Root;

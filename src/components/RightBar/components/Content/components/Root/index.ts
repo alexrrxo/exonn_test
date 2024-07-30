@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../utils";
 
 const Root = styled.div`
 	padding: 20px;
@@ -6,9 +7,9 @@ const Root = styled.div`
 	width: 100%;
 	height: 100%;
 
-	border-left: 1px solid #AEB6CE33;
+	border-left: 1px solid ${theme.grayDivider};
 
-	background-color: #F1F5F8;
+	background-color: ${theme.secondaryGray};
 `;
 
 export default Root;

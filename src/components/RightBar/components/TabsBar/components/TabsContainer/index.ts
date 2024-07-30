@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../utils";
 
 interface Props {
 	hideScroll?: boolean;
@@ -16,11 +17,11 @@ const TabsContainer = styled.div<Props>`
 	overflow-x: ${props => props.hideScroll ? "hidden" : "auto"};
 	white-space: nowrap;
 
-	background-color: #F1F5F8;
+	background-color: ${theme.secondaryGray};
 
 	overflow-y: hidden;
 
-	& > div:not(:last-child) > * > * {
+	& > div:not(:last-child) > * > * > * {
 		& :before {
 			content: '';
 			position: absolute;
@@ -29,7 +30,7 @@ const TabsContainer = styled.div<Props>`
 			transform: translateY(-50%);
 			height: 10px;
 			width: 0; 
-			border-left: 1px solid #AEB6CE33;
+			border-left: 1px solid ${theme.grayDivider};
   	}
 	}
 
@@ -38,13 +39,13 @@ const TabsContainer = styled.div<Props>`
 }
 
 &::-webkit-scrollbar-track {
-  background: #FEFEFE;
+  background: ${theme.secondaryWhite};
 }
 
 &::-webkit-scrollbar-thumb {
-	border: 2px solid #FEFEFE;
+	border: 2px solid ${theme.secondaryWhite};
   border-radius: 40px;
-  background-color: #7F858D66;
+  background-color: ${theme.primaryGray};
 }
 
 &::-webkit-scrollbar-thumb:hover {

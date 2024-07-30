@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../../../utils";
 
 interface Props {
-	bgcolor?: string;
+	bgColor?: string;
 	linecolor?: string;
 	rightPadding?: boolean;
 	borderRadius?: boolean;
@@ -13,21 +14,19 @@ const Root = styled.div<Props>`
 
 	padding: 15px 20px;
 
-	padding-right: ${props => !props.rightPadding ? "15px" : "0px"};
-
 	height: 48px;
 
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 
-	background-color: ${props => props.bgcolor};
+	background-color: ${props => props.bgColor};
 
 	cursor: pointer;
 
 	border-radius: ${props => props.borderRadius ? "6px" : "0px"};
 
-	border-bottom: 1px solid #AEB6CE33;
+	border-bottom: 1px solid ${theme.grayDivider};
 	
 	pointer-events: ${props => props.pointerEvents || "auto"};
 

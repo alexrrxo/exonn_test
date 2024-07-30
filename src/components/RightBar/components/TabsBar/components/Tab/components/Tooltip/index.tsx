@@ -1,6 +1,7 @@
 import React, { ReactElement, FC } from "react";
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/system';
+import { theme } from "../../../../../../../../utils";
 
 const CustomTooltip = styled(({ className, ...props }: TooltipProps & { className?: string }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -9,7 +10,7 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps & { classNam
 		padding: 0,
     color: '#333',
     fontSize: 14,
-		border: "1px solid #AEB6CE33",
+		border: `1px solid ${theme.grayDivider}`,
     backgroundColor: '#f0f0f0',
 		borderRadius: "6px"
   },

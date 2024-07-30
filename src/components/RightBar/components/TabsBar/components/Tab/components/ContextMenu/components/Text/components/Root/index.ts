@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import { theme } from "../../../../../../../../../../../../utils";
 
 const Root = styled.div<{textcolor: string}>`
 	margin-left: 10px;
 
-	color: ${(props) => (props.textcolor || "#7F858D")};
+	color: ${(props) => (props.textcolor || theme.primaryGray)};
 
 	font-family: Poppins;
 	font-size: 14px;

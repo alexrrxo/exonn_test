@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import Root from "./components/Root";
 import Tab from "./components/Tab";
@@ -7,62 +7,45 @@ import TabsContainer from "./components/TabsContainer";
 import { useTypedDispatch, useTypedSelector } from "../../../../redux/store";
 import { setTabs, selectTab, TabI, setLockedTabs, setVisibleTabIds } from "../../../../redux/slices/tabs-slice";
 import Space from "./components/Space";
+import { theme } from "../../../../utils";
+import { Link } from "react-router-dom";
 
 const TabsBar = () => {
 	const dispatch = useTypedDispatch()
 	const {tabs, lockedTabs, selectedTab} = useTypedSelector(state => state.tabs);
-
-  const [pendingDragId, setPendingDragId] = useState<string | null>(null);
-	
-  const timeoutRef = useRef<any>(null);
-
 	const [canUpdateTabsIds, setCanUpdateTabsIds] = useState(true)
 
-  const onDragEndLocked = (result: DropResult) => {
-		setCanUpdateTabsIds(true)
-    clearTimeout(timeoutRef.current);
-    setPendingDragId(null);
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+	const [isShowList, setIsShowList] = useState(false);
+	const [isShowButton, setIsShowButton] = useState(true); 
+	
+	const lineRef = useRef<HTMLDivElement>(null)
 
-    if (!result.destination) return;
+	const onDragStart = useCallback(() => {
+		setCanUpdateTabsIds(false)
+	}, []);
 
-    const reorderedTabs = Array.from(lockedTabs);
-    const [removed] = reorderedTabs.splice(result.source.index, 1);
-    reorderedTabs.splice(result.destination.index, 0, removed);
-
-    dispatch(setLockedTabs(reorderedTabs));
-  };
-
-  const onDragEndUnlocked = (result: DropResult) => {
-		setCanUpdateTabsIds(true)
-    clearTimeout(timeoutRef.current);
-    setPendingDragId(null);
-
-    if (!result.destination) return;
-
-    const reorderedTabs = Array.from(tabs);
-    const [removed] = reorderedTabs.splice(result.source.index, 1);
-    reorderedTabs.splice(result.destination.index, 0, removed);
-
-    dispatch(setTabs(reorderedTabs));
-  };
-
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>, draggableId: string) => {
-		e.preventDefault()
-		e.stopPropagation()
-
-    setTimeout(() => {
-      setPendingDragId(draggableId);
-    }, 2000);
-  };
-
-  const handleTouchEnd = () => {
-    clearTimeout(timeoutRef.current);
-		setPendingDragId(null)
-  };
-
-  const handleTouchMove = () => {
-    clearTimeout(timeoutRef.current);
-  };
+  const onDragEndLocked = useCallback((result: DropResult) => {
+		setCanUpdateTabsIds(true);
+		if (!result.destination) return;
+	
+		const reorderedTabs = Array.from(lockedTabs);
+		const [removed] = reorderedTabs.splice(result.source.index, 1);
+		reorderedTabs.splice(result.destination.index, 0, removed);
+	
+		dispatch(setLockedTabs(reorderedTabs));
+	}, [lockedTabs, dispatch]);
+	
+	const onDragEndUnlocked = useCallback((result: DropResult) => {
+		setCanUpdateTabsIds(true);
+		if (!result.destination) return;
+	
+		const reorderedTabs = Array.from(tabs);
+		const [removed] = reorderedTabs.splice(result.source.index, 1);
+		reorderedTabs.splice(result.destination.index, 0, removed);
+	
+		dispatch(setTabs(reorderedTabs));
+	}, [tabs, dispatch]);
 
 	const onSelectTab = useCallback((tab: TabI) => {
 		if(tab){
@@ -70,19 +53,11 @@ const TabsBar = () => {
 		}
 	}, [])
 
-	const lineRef = useRef<HTMLDivElement>(null)
-	const [isShowList, setIsShowList] = useState(false);
-
-
-	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -97,10 +72,14 @@ const TabsBar = () => {
 		const observer = new IntersectionObserver(
 			(entries) => {
 				const visibleEntries = entries.filter(entry => entry.isIntersecting);
-
 				const visibleTabsIds = visibleEntries.map((entry) => entry.target?.attributes.getNamedItem("data-rbd-draggable-id")?.value);
 				
 				if(isShowList && canUpdateTabsIds) {
+					if(visibleTabsIds.length === tabs.length) {
+						setIsShowButton(false)
+					} else {
+						setIsShowButton(true)
+					}
 					dispatch(setVisibleTabIds(visibleTabsIds));
 				}
 			},
@@ -118,15 +97,21 @@ const TabsBar = () => {
 			const items = lineRef?.current?.children[1]?.childNodes;
 			items?.forEach((item: any) => observer.observe(item));
 		}
-
     return () => {
       observer.disconnect();
     };
-  }, [isShowList, tabs, pendingDragId, lineRef, lockedTabs, canUpdateTabsIds]);
+  }, [isShowList, tabs, lineRef, lockedTabs, canUpdateTabsIds, windowWidth]);
 
-	const onDragStart = useCallback(() => {
-		setCanUpdateTabsIds(false)
-	}, []);
+	// useEffect(() => {
+  //   if (lineRef?.current) {
+  //     const hasHScroll = window.innerWidth > lineRef?.current.scrollWidth;
+
+	// 		console.log("window.innerWidth", window.innerWidth)
+	// 		console.log("lineRef?.current.clientWidth", lineRef?.current.scrollWidth)
+
+  //     setIsShowButton(hasHScroll)
+  //   }
+  // }, [windowWidth]);
 
   return (
     <Root ref={lineRef}>
@@ -137,7 +122,7 @@ const TabsBar = () => {
 							<TabsContainer
 								{...provided.droppableProps}
 								ref={provided.innerRef}
-								style={{height: 48, borderRight: "1px solid #AEB6CE33"}}
+								style={{height: 48, borderRight: `1px solid ${theme.grayDivider}`}}
 							>
 								{lockedTabs.map((tab, i) => (
 									<Draggable key={tab.id} draggableId={tab.id} index={i} 
@@ -148,16 +133,15 @@ const TabsBar = () => {
 												onClick={() => onSelectTab(tab)}
 												{...provided.draggableProps}
 												{...provided.dragHandleProps}
-												onTouchStart={(e) => handleTouchStart(e, tab.id)}
-												onTouchEnd={handleTouchEnd}
-												onTouchMove={handleTouchMove}
 											>
-												<Tab
-													tab={tab}
-													isDragging={snapshot.isDragging}
-													tooltip={i === 3}
-													selected={selectedTab?.id === tab.id}
-												/>
+												<Link to={tab.title}>
+													<Tab
+														tab={tab}
+														isDragging={snapshot.isDragging}
+														tooltip={!tab.showTitle}
+														selected={selectedTab?.id === tab.id}
+													/>
+												</Link>
 											</div>
 										)}
 									</Draggable>
@@ -188,16 +172,15 @@ const TabsBar = () => {
 											onClick={() => onSelectTab(tab)}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      onTouchStart={(e) => handleTouchStart(e, tab.id)}
-                      onTouchEnd={handleTouchEnd}
-                      onTouchMove={handleTouchMove}
                     >
-                      <Tab
-												tab={tab}
-                        isDragging={snapshot.isDragging}
-                        tooltip={i === 3}
-                        selected={selectedTab?.id === tab.id}
-                      />
+											<Link to={tab.title}>
+												<Tab
+													tab={tab}
+													isDragging={snapshot.isDragging}
+													tooltip={!tab.showTitle}
+													selected={selectedTab?.id === tab.id}
+												/>
+											</Link>
                     </div>
                   )}
                 </Draggable>
@@ -207,7 +190,7 @@ const TabsBar = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <Button onSelectTab={onSelectTab} open={isShowList} onChange={setIsShowList} />
+      {isShowButton && <Button onSelectTab={onSelectTab} open={isShowList} onChange={setIsShowList} />}
     </Root>
   );
 };
