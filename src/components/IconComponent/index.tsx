@@ -6,7 +6,7 @@ export type IconNameType = "apps" | "bank" | "book" | "box" | "browser" | "cart-
 interface Props {
 	name: IconNameType;
 	color?: string;
-}
+};
 
 const Icons: FC<Props> = ({ name = "close", color = theme.primaryGray }) => {
     const icons = {

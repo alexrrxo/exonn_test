@@ -3,7 +3,8 @@ import { theme } from "../../../../../../../../../utils";
 
 interface Props {
 	visible: boolean;
-}
+};
+
 const Root = styled.div<Props>`
 	width: 34px;
 	height: 100%;

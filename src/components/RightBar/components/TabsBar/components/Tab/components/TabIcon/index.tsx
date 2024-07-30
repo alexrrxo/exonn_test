@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC } from "react";
 import Icons, { IconNameType } from "../../../../../../../IconComponent";
 
 interface Props {
@@ -14,7 +14,7 @@ const TabIcon: FC<Props> = ({showText, name, color}) => {
 				<Icons name={name} color={color} />
 			</div>
 		</div>
-	)
-}
+	);
+};
 
 export default TabIcon;

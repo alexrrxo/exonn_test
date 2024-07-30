@@ -1,11 +1,9 @@
-import React,{ useCallback, useEffect, useMemo } from 'react';
-import Menu from '@mui/material/Menu';
+import React,{ useCallback, useEffect, useMemo } from "react";
 import Root from "./components/Root";
 import Tab from "./components/Tab";
-import styled from "styled-components";
 import Icons from "../../../../../IconComponent";
 import { useTypedSelector } from "../../../../../../redux/store";
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import { useTypedDispatch } from "../../../../../../redux/store";
 import { setTabs, TabI } from "../../../../../../redux/slices/tabs-slice";
 import Space from "./components/Space";
@@ -18,7 +16,7 @@ interface Props {
   open: boolean;
   onChange: React.Dispatch<React.SetStateAction<boolean>>;
 	onSelectTab: (tab: TabI) => void;
-}
+};
 
 const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
   const dispatch = useTypedDispatch();
@@ -58,9 +56,9 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
 
 	useEffect(() => {
 		if(!open) {
-			setAnchorEl(null)
+			setAnchorEl(null);
 		}
-	}, [open])
+	}, [open]);
 
   return (
     <div>
@@ -75,7 +73,7 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
           open={open}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': 'basic-button',
+            "aria-labelledby": "basic-button",
           }}
           marginThreshold={0}
         >

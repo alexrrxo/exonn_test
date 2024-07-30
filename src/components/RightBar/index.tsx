@@ -1,8 +1,8 @@
-import React from 'react'
-import Root from "./components/Root"
-import TabsBar from "./components/TabsBar"
-import Space from "./components/Space"
-import Content from "./components/Content"
+import React from "react";
+import Root from "./components/Root";
+import TabsBar from "./components/TabsBar";
+import Space from "./components/Space";
+import Content from "./components/Content";
 
 const RightBar = () => {
 	return (
@@ -13,7 +13,7 @@ const RightBar = () => {
 				<Content />
 			</Root>
 		</>
-	)
-} 
+	);
+};
 
-export default RightBar
+export default RightBar;

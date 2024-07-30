@@ -47,27 +47,27 @@ export const tabsSlice = createSlice({
       const filtredTabs = state.tabs.filter((tab) => tab.id !== action.payload.id)
 
       if (lockedTab) {
-        lockedTab.isLocked = true
-        state.lockedTabs.push(lockedTab)
+        lockedTab.isLocked = true;
+        state.lockedTabs.push(lockedTab);
       }
-      state.tabs = filtredTabs
+      state.tabs = filtredTabs;
     },
     unlockTab: (state, action: PayloadAction<TabI>) => {
-      const unlockedTab = state.lockedTabs.find((tab) => tab.id === action.payload.id)
-      const filtredLockedTabs = state.lockedTabs.filter((tab) => tab.id !== action.payload.id)
+      const unlockedTab = state.lockedTabs.find((tab) => tab.id === action.payload.id);
+      const filtredLockedTabs = state.lockedTabs.filter((tab) => tab.id !== action.payload.id);
 
       if (unlockedTab) {
-        unlockedTab.isLocked = false
-        state.tabs.unshift(unlockedTab)
+        unlockedTab.isLocked = false;
+        state.tabs.unshift(unlockedTab);
       }
-      state.lockedTabs = filtredLockedTabs
+      state.lockedTabs = filtredLockedTabs;
     },
     setVisibleTabIds: (state, action: PayloadAction<Array<string | undefined>>) => {
       state.visibleTabsIds = action.payload
     }
   }
-})
+});
 
-export const { setTabs, setLockedTabs, setVisibleTabIds, selectTab, lockTab, unlockTab } = tabsSlice.actions
+export const { setTabs, setLockedTabs, setVisibleTabIds, selectTab, lockTab, unlockTab } = tabsSlice.actions;
 
-export default tabsSlice.reducer
+export default tabsSlice.reducer;

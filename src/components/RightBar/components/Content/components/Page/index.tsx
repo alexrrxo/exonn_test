@@ -1,7 +1,7 @@
-import React from 'react';
-import Root from './components/Root';
-import { useTypedSelector } from '../../../../../../redux/store';
-import { Route, Routes } from 'react-router-dom'; // Изменен импорт
+import React from "react";
+import Root from "./components/Root";
+import { useTypedSelector } from "../../../../../../redux/store";
+import { Route, Routes } from "react-router-dom";
 
 const Page = () => {
   const { lockedTabs, tabs } = useTypedSelector((state) => state.tabs);

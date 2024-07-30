@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC } from "react"
 import Root from "./components/Root"
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 const TabText: FC<Props> = ({ text, textcolor, reduceWidth = false }) => {
 	return (
 		<Root textcolor={textcolor} reduceWidth={reduceWidth}>{text}</Root>
-	)
-}
+	);
+};
 
-export default TabText
+export default TabText;

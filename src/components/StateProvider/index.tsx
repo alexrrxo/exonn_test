@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store";
 import { setLockedTabs, setTabs } from "../../redux/slices/tabs-slice";
 import { reserveState } from "../../mocks";
@@ -9,8 +9,8 @@ const StateInitProvider = () => {
   const { lockedTabs, tabs } = useTypedSelector(state => state.tabs);
 
   useEffect(() => {
-    const storedLockedTabs = localStorage.getItem('lockedTabs');
-    const storedTabs = localStorage.getItem('tabs');
+    const storedLockedTabs = localStorage.getItem("lockedTabs");
+    const storedTabs = localStorage.getItem("tabs");
 
     const lockedTabs = storedLockedTabs && JSON.parse(storedLockedTabs);
     const tabs = storedTabs && JSON.parse(storedTabs);
@@ -26,12 +26,12 @@ const StateInitProvider = () => {
 
   useEffect(() => {
     const stringifyData = JSON.stringify(lockedTabs);
-    localStorage.setItem('lockedTabs', stringifyData);
+    localStorage.setItem("lockedTabs", stringifyData);
   }, [lockedTabs]);
 
   useEffect(() => {
     const stringifyData = JSON.stringify(tabs);
-    localStorage.setItem('tabs', stringifyData);
+    localStorage.setItem("tabs", stringifyData);
   }, [tabs]);
 
 	return (

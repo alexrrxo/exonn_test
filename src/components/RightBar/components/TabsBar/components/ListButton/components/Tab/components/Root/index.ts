@@ -4,7 +4,7 @@ interface Props {
 	bgColor?: string;
 	linecolor?: string;
 	isDragging?: boolean;
-}
+};
 
 const Root = styled.div<Props>`
 	position: relative;

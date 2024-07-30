@@ -1,4 +1,3 @@
-import { position } from './../../../../node_modules/@types/stylis/index.d';
 import styled from "styled-components";
 import { theme } from "../../../utils";
 

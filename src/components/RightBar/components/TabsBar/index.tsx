@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import React, { useCallback, useState, useRef, useEffect } from "react";
+import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import Root from "./components/Root";
 import Tab from "./components/Tab";
 import Button from "./components/ListButton";
@@ -11,18 +11,18 @@ import { theme } from "../../../../utils";
 import { Link } from "react-router-dom";
 
 const TabsBar = () => {
-	const dispatch = useTypedDispatch()
+	const dispatch = useTypedDispatch();
 	const {tabs, lockedTabs, selectedTab} = useTypedSelector(state => state.tabs);
-	const [canUpdateTabsIds, setCanUpdateTabsIds] = useState(true)
+	const [canUpdateTabsIds, setCanUpdateTabsIds] = useState(true);
 
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const [isShowList, setIsShowList] = useState(false);
 	const [isShowButton, setIsShowButton] = useState(true); 
 	
-	const lineRef = useRef<HTMLDivElement>(null)
+	const lineRef = useRef<HTMLDivElement>(null);
 
 	const onDragStart = useCallback(() => {
-		setCanUpdateTabsIds(false)
+		setCanUpdateTabsIds(false);
 	}, []);
 
   const onDragEndLocked = useCallback((result: DropResult) => {
@@ -49,24 +49,24 @@ const TabsBar = () => {
 
 	const onSelectTab = useCallback((tab: TabI) => {
 		if(tab){
-			dispatch(selectTab(tab))
+			dispatch(selectTab(tab));
 		}
-	}, [])
+	}, []);
 
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
 	useEffect(() => {
 		setCanUpdateTabsIds(true);
-		setIsShowList(false)
-	}, [windowWidth])
+		setIsShowList(false);
+	}, [windowWidth]);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -76,9 +76,9 @@ const TabsBar = () => {
 				
 				if(isShowList && canUpdateTabsIds) {
 					if(visibleTabsIds.length === tabs.length) {
-						setIsShowButton(false)
+						setIsShowButton(false);
 					} else {
-						setIsShowButton(true)
+						setIsShowButton(true);
 					}
 					dispatch(setVisibleTabIds(visibleTabsIds));
 				}
@@ -92,7 +92,7 @@ const TabsBar = () => {
 		if(isShowList) {
 			lineRef.current?.children[1]?.scrollTo({
 				left: 0,
-			})
+			});
 
 			const items = lineRef?.current?.children[1]?.childNodes;
 			items?.forEach((item: any) => observer.observe(item));

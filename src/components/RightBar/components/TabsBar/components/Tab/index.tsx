@@ -1,6 +1,6 @@
-import React, { FC, MouseEvent, useCallback, useMemo, useState } from 'react'
-import Root from "./components/Root"
-import TabText from "./components/TabText"
+import React, { FC, MouseEvent, useCallback, useMemo, useState } from "react";
+import Root from "./components/Root";
+import TabText from "./components/TabText";
 import TabIcon from "./components/TabIcon";
 import CustomTooltipComponent from "./components/Tooltip";
 import { useTypedDispatch } from "../../../../../../redux/store";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = false }) => {
-	const dispatch = useTypedDispatch()
+	const dispatch = useTypedDispatch();
 
 	const [isHovered, setIsHovered] = useState(false);
 	const [anchorPosition, setAnchorPosition] = useState<null | { top: number, left: number }>(null);
@@ -34,42 +34,42 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 	}, []);
 
 	const bgColor = useMemo(() => {
-		const draggingColor = theme.primaryGray
-		const selectedColor = theme.thirdGray
-		const unselectedColor = theme.secondaryWhite
+		const draggingColor = theme.primaryGray;
+		const selectedColor = theme.thirdGray;
+		const unselectedColor = theme.secondaryWhite;
 		const hoveredColor = theme.thirdGray
 
-		if(isDragging) return draggingColor
-		if(selected) return selectedColor
-		if(isHovered) return hoveredColor
-		return unselectedColor
-	}, [isDragging, selected, isHovered])
+		if(isDragging) return draggingColor;
+		if(selected) return selectedColor;
+		if(isHovered) return hoveredColor;
+		return unselectedColor;
+	}, [isDragging, selected, isHovered]);
 
 	const textcolor = useMemo(() => {
-		const draggingColor = theme.primaryWhite
+		const draggingColor = theme.primaryWhite;
 		const selectedColor = theme.primaryBlack;
-		const unselectedColor = theme.primaryGray
-		const hoveredColor = theme.primaryBlack
+		const unselectedColor = theme.primaryGray;
+		const hoveredColor = theme.primaryBlack;
 
-		if(isDragging) return draggingColor
-		if(selected) return selectedColor
-		if(isHovered) return hoveredColor
+		if(isDragging) return draggingColor;
+		if(selected) return selectedColor;
+		if(isHovered) return hoveredColor;
 
-		return unselectedColor
-	}, [isDragging, selected, isHovered])
+		return unselectedColor;
+	}, [isDragging, selected, isHovered]);
 
 	const linecolor = useMemo(() => {
-		const lockedColor = theme.primaryGray
-		const selectedColor = theme.primaryBlue
-		const unselectedColor = theme.transparent
+		const lockedColor = theme.primaryGray;
+		const selectedColor = theme.primaryBlue;
+		const unselectedColor = theme.transparent;
 
 		if(tab.isLocked) return lockedColor;
-		if(isDragging) return unselectedColor
+		if(isDragging) return unselectedColor;
 
 		if(selected) return selectedColor;
 
 		return unselectedColor;
-	}, [selected, isDragging, tab.isLocked])
+	}, [selected, isDragging, tab.isLocked]);
 
 	const isReduceWidth = useMemo(() => {
 		if(isDragging) return false;
@@ -77,36 +77,36 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 	}, [isHovered, tab.isLocked, isDragging]);
 
 	const unlockTabHandler = useCallback(() => {
-		dispatch(unlockTab(tab))
-	}, [dispatch])
+		dispatch(unlockTab(tab));
+	}, [dispatch]);
 
-	const [showClose, setShoweClose] = useState(false)
+	const [showClose, setShoweClose] = useState(false);
 
 	const mouseEnterHandler = useCallback(() => {
 		setShoweClose(true);
-		setIsHovered(true)
-	}, [setShoweClose, setIsHovered])
+		setIsHovered(true);
+	}, [setShoweClose, setIsHovered]);
 
 	const mouseLeaveHandler = useCallback(() => {
 		setShoweClose(false);
-		setIsHovered(false)
-	}, [setShoweClose, setIsHovered])
+		setIsHovered(false);
+	}, [setShoweClose, setIsHovered]);
 
 	const handleClick = useCallback((tab: TabI) => {
 		if(tab.isLocked) {
-			dispatch(unlockTab(tab))
+			dispatch(unlockTab(tab));
 		} else {
-			dispatch(lockTab(tab))
+			dispatch(lockTab(tab));
 		}
-	}, [tab])
+	}, [tab]);
 
 	const showTooltip = useMemo(() => {
 		if(isDragging) return false;
-		if(Boolean(anchorPosition) && tooltip) return false
-		if(tooltip) return true
-		return false
+		if(Boolean(anchorPosition) && tooltip) return false;
+		if(tooltip) return true;
+		return false;
 
-	}, [anchorPosition, tooltip, isDragging])
+	}, [anchorPosition, tooltip, isDragging]);
 
 	return (
 			<CustomTooltipComponent tooltip={showTooltip}
@@ -144,7 +144,7 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 					</Menu>
 				</div>
 			</CustomTooltipComponent> 
-	)
-}
+	);
+};
 
-export default Tab
+export default Tab;
