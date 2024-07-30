@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useState } from "react";
 import Root from "./components";
 import Icons from "../IconComponent";
 

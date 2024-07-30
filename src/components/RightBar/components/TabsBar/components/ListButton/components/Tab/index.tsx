@@ -1,12 +1,12 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { FC, useMemo } from 'react'
 import Root from "./components/Root"
 import TabIcon from "./components/TabIcon"
 import TabText from "./components/TabText"
-import { Tab as TabType } from "../../../../../../../../redux/slices/tabs-slice"
+import { TabI } from "../../../../../../../../redux/slices/tabs-slice"
 import CloseButton from "../../../../../../../CloseButton"
 
 interface Props {
-	tab: TabType;
+	tab: TabI;
 	selected?: boolean;
 	isDragging?: boolean
 }

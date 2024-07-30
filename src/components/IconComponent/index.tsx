@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 
 export type IconNameType = "apps" | "bank" | "book" | "box" | "browser" | "cart-check" | "chart-pie" | "close" | "cube" | "down-arrow" | "list" | "mail" | "phone-call" | "pin" | "settings" | "shop" | "up-arrow" | "user-add";
 

@@ -1,5 +1,5 @@
-import React from 'react'
-import Root from "./components/Root"
+import React from "react";
+import Root from "./components/Root";
 
 const LeftBar = () => {
 	return (
@@ -7,4 +7,4 @@ const LeftBar = () => {
 	) 
 } 
 
-export default LeftBar
+export default LeftBar;

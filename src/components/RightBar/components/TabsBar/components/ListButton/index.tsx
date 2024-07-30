@@ -7,14 +7,14 @@ import Icons from "../../../../../IconComponent";
 import { useTypedSelector } from "../../../../../../redux/store";
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { useTypedDispatch } from "../../../../../../redux/store";
-import { setUnlockedTabs, Tab as TabType } from "../../../../../../redux/slices/tabs-slice";
+import { setTabs, TabI } from "../../../../../../redux/slices/tabs-slice";
 import Space from "./components/Space";
 import TabsContainer from "./components/TabsContainer";
 
 interface Props {
   open: boolean;
   onChange: React.Dispatch<React.SetStateAction<boolean>>;
-	onSelectTab: (tab: TabType) => void;
+	onSelectTab: (tab: TabI) => void;
 }
 
 const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
@@ -50,7 +50,7 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
 	
 		const data = [...firstTabs, ...newTabs];
 	
-		dispatch(setUnlockedTabs(data));
+		dispatch(setTabs(data));
 	};
 
 	useEffect(() => {

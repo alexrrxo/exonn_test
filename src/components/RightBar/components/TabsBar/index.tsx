@@ -1,11 +1,11 @@
-import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from 'react-beautiful-dnd';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import Root from "./components/Root";
 import Tab from "./components/Tab";
 import Button from "./components/ListButton";
 import TabsContainer from "./components/TabsContainer";
 import { useTypedDispatch, useTypedSelector } from "../../../../redux/store";
-import { setUnlockedTabs, selectTab, Tab as TabType, setLockedTabs, setVisibleTabIds } from "../../../../redux/slices/tabs-slice";
+import { setTabs, selectTab, TabI, setLockedTabs, setVisibleTabIds } from "../../../../redux/slices/tabs-slice";
 import Space from "./components/Space";
 
 const TabsBar = () => {
@@ -43,7 +43,7 @@ const TabsBar = () => {
     const [removed] = reorderedTabs.splice(result.source.index, 1);
     reorderedTabs.splice(result.destination.index, 0, removed);
 
-    dispatch(setUnlockedTabs(reorderedTabs));
+    dispatch(setTabs(reorderedTabs));
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>, draggableId: string) => {
@@ -64,7 +64,7 @@ const TabsBar = () => {
     clearTimeout(timeoutRef.current);
   };
 
-	const onSelectTab = useCallback((tab: TabType) => {
+	const onSelectTab = useCallback((tab: TabI) => {
 		if(tab){
 			dispatch(selectTab(tab))
 		}

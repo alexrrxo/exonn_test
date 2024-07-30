@@ -4,13 +4,13 @@ import TabText from "./components/TabText"
 import TabIcon from "./components/TabIcon";
 import CustomTooltipComponent from "./components/Tooltip";
 import { useTypedDispatch } from "../../../../../../redux/store";
-import { lockTab, selectTab, Tab as TabType, unlockTab } from "../../../../../../redux/slices/tabs-slice";
+import { lockTab, selectTab, TabI, unlockTab } from "../../../../../../redux/slices/tabs-slice";
 import CloseButton from "../../../../../CloseButton";
 import { Menu } from "@mui/material";
 import ContextMenu from "./components/ContextMenu";
 
 interface Props {
-	tab: TabType;
+	tab: TabI;
 	selected?: boolean;
 	tooltip?: boolean;
 	isDragging?: boolean
@@ -21,7 +21,7 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 
 	const [anchorPosition, setAnchorPosition] = useState<null | { top: number, left: number }>(null);
 
-  const handleRightClick = (event: MouseEvent<HTMLDivElement>, tab: TabType) => {
+  const handleRightClick = (event: MouseEvent<HTMLDivElement>, tab: TabI) => {
     event.preventDefault();
     setAnchorPosition({ top: event.clientY + 15, left: event.clientX + 10 });
 		dipatch(selectTab(tab))
@@ -80,7 +80,7 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 		setShoweClose(false);
 	}, [setShoweClose])
 
-	const handleClick = useCallback((tab: TabType) => {
+	const handleClick = useCallback((tab: TabI) => {
 		if(tab.isLocked) {
 			dispatch(unlockTab(tab))
 		} else {

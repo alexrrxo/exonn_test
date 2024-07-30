@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch } from 'react-redux';
+import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch } from "react-redux";
 import tabsSlice from "./slices/tabs-slice";
 import { useSelector } from "react-redux";
 

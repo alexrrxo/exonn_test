@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import {ReactComponent as Bank} from "../../../../../../../../icons/apps.svg"
 import Icons, { IconNameType } from "../../../../../../../IconComponent";
 
 interface Props {
