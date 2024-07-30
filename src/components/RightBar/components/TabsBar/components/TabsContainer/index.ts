@@ -45,7 +45,7 @@ const TabsContainer = styled.div<Props>`
 &::-webkit-scrollbar-thumb {
 	border: 2px solid ${theme.secondaryWhite};
   border-radius: 40px;
-  background-color: ${theme.primaryGray};
+  background-color: #7F858D66;
 }
 
 &::-webkit-scrollbar-thumb:hover {
