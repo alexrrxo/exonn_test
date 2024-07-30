@@ -2,7 +2,7 @@ import React, { FC, MouseEvent, useCallback, useMemo, useState } from 'react'
 import Root from "./components/Root"
 import TabText from "./components/TabText"
 import TabIcon from "./components/TabIcon";
-import CustomTooltipComponent from "../Tooltip";
+import CustomTooltipComponent from "./components/Tooltip";
 import { useTypedDispatch } from "../../../../../../redux/store";
 import { lockTab, selectTab, Tab as TabType, unlockTab } from "../../../../../../redux/slices/tabs-slice";
 import CloseButton from "../../../../../CloseButton";
@@ -70,10 +70,6 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 		dispatch(unlockTab(tab))
 	}, [dispatch])
 
-	const lockTabHandler = useCallback(() => {
-		dispatch(lockTab(tab))
-	}, [dispatch])
-
 	const [showClose, setShoweClose] = useState(false)
 
 	const onShowClose = useCallback(() => {
@@ -92,12 +88,29 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 		}
 	}, [tab])
 
+	const showTooltip = useMemo(() => {
+		if(Boolean(anchorPosition) && tooltip) return false
+		if(tooltip) return true
+		return false
+
+	}, [anchorPosition, tooltip])
+
 	return (
-		tooltip ? 
-			<CustomTooltipComponent >
+			<CustomTooltipComponent tooltip={showTooltip}
+				tooltipComponent={
+					<Root
+						borderRadius bgcolor={"#FFF"}
+						linecolor={"#transparent"}
+						pointerEvents="none"
+					> 
+						<TabIcon showText color={textcolor} name={tab.icon} />
+						<TabText text={tab.title} textcolor={textcolor} />
+				</Root>
+				}
+			>
 				<div>
 				<Root onContextMenu={(e) => handleRightClick(e, tab)} rightPadding={tab.isLocked} bgcolor={bgcolor} linecolor={linecolor} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
-					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon} />
+					<TabIcon showText={!tooltip} color={textcolor} name={tab.icon} />
 					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
 					{tab.isLocked && <CloseButton color="gray" visible={showClose} onClose={unlockTabHandler} />}
 				</Root>
@@ -111,23 +124,6 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 					</Menu>
 				</div>
 			</CustomTooltipComponent> 
-			:
-			<div>
-				<Root rightPadding={tab.isLocked} bgcolor={bgcolor} linecolor={linecolor} onContextMenu={(e) => handleRightClick(e, tab)} onMouseEnter={onShowClose} onMouseLeave={onHideClose}> 
-					<TabIcon showText={tab.showTitle} color={textcolor} name={tab.icon}/>
-					{tab.showTitle && <TabText text={tab.title} textcolor={textcolor} />}
-					{tab.isLocked && <CloseButton color="gray" visible={showClose} onClose={unlockTabHandler} />}
-				</Root>
-				<Menu
-					open={Boolean(anchorPosition)}
-					anchorReference="anchorPosition"
-					anchorPosition={anchorPosition ? { top: anchorPosition.top, left: anchorPosition.left } : undefined}
-					onClose={handleClose}
-					style={{boxShadow: "none"}}
-     		 >
-        	<ContextMenu onClick={handleClick} tab={tab} />
-      	</Menu>
-			</div>
 	)
 }
 

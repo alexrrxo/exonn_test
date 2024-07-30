@@ -4,7 +4,7 @@ import { styled } from '@mui/system';
 
 const CustomTooltip = styled(({ className, ...props }: TooltipProps & { className?: string }) => (
   <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
+))(() => ({
   [`& .${tooltipClasses.tooltip}`]: {
 		padding: 0,
     color: '#333',
@@ -19,12 +19,14 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps & { classNam
 }));
 
 interface CustomTooltipComponentProps {
+	tooltip?: boolean;
   children: ReactElement;
+	tooltipComponent: ReactElement;
 }
 
-const CustomTooltipComponent: FC<CustomTooltipComponentProps> = ({children }) => {
+const CustomTooltipComponent: FC<CustomTooltipComponentProps> = ({children, tooltip, tooltipComponent}) => {
   return (
-    <CustomTooltip title={children} >
+    <CustomTooltip title={tooltip ? tooltipComponent : ""} >
 			{children}
 		</CustomTooltip>
   );

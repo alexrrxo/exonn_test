@@ -4,6 +4,8 @@ interface Props {
 	bgcolor?: string;
 	linecolor?: string;
 	rightPadding?: boolean;
+	borderRadius?: boolean;
+	pointerEvents?: string;
 }
 
 const Root = styled.div<Props>`
@@ -23,8 +25,12 @@ const Root = styled.div<Props>`
 
 	cursor: pointer;
 
+	border-radius: ${props => props.borderRadius ? "6px" : "0px"};
+
 	border-bottom: 1px solid #AEB6CE33;
-		
+	
+	pointer-events: ${props => props.pointerEvents || "auto"};
+
 	&::before {
 		content: "";
 		position: absolute;
