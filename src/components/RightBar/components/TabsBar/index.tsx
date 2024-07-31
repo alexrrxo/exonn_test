@@ -118,9 +118,6 @@ const TabsBar = () => {
 		}
   }, [windowWidth]);
 
-	console.log("isShowButton", isShowButton)
-	console.log("isShowList", isShowList)
-
   return (
     <Root ref={lineRef}>
 			<div>
