@@ -125,7 +125,7 @@ const TabsBar = () => {
 								style={{height: 48, borderRight: `1px solid ${theme.grayDivider}`}}
 							>
 								{lockedTabs.map((tab, i) => (
-									<Draggable key={tab.id} draggableId={tab.id} index={i} 
+									<Draggable key={tab.id} draggableId={tab.id} index={i}
 									>
 										{(provided, snapshot) => (
 											<div

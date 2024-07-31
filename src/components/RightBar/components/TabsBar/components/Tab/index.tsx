@@ -9,6 +9,7 @@ import CloseButton from "../../../../../CloseButton";
 import { Menu } from "@mui/material";
 import ContextMenu from "./components/ContextMenu";
 import { theme } from "../../../../../../utils";
+import { isMobile } from "react-device-detect";
 
 interface Props {
 	tab: TabI;
@@ -72,9 +73,10 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 	}, [selected, isDragging, tab.isLocked]);
 
 	const isReduceWidth = useMemo(() => {
+		if(isMobile) return false
 		if(isDragging) return false;
 		if(tab.isLocked && isHovered) return true;
-	}, [isHovered, tab.isLocked, isDragging]);
+	}, [isHovered, tab.isLocked, isDragging, isMobile]);
 
 	const unlockTabHandler = useCallback(() => {
 		dispatch(unlockTab(tab));
@@ -129,6 +131,7 @@ const Tab: FC<Props> = ({ tab, isDragging = false, tooltip = false, selected = f
 					onContextMenu={(e) => handleRightClick(e, tab)}
 					onMouseEnter={mouseEnterHandler}
 					onMouseLeave={mouseLeaveHandler}
+					onTouchMove={handleClose}
 				> 
 					<TabIcon showText={!tooltip} color={textcolor} name={tab.icon} />
 					{tab.showTitle && <TabText reduceWidth={isReduceWidth} text={tab.title} textcolor={textcolor} />}
