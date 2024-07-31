@@ -11,6 +11,7 @@ import TabsContainer from "./components/TabsContainer";
 import { theme } from "../../../../../../utils";
 import CustomMenu from "./components/CustomMenu";
 import { Link } from "react-router-dom";
+import Notice from "./components/Notice";
 
 interface Props {
   open: boolean;
@@ -61,7 +62,7 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
 	}, [open]);
 
   return (
-    <div>
+    <div style={{backgroundColor: theme.thirdGray}}>
       <Root onClick={handleClick} active={open}>
         <Icons name={anchorEl ? "up-arrow" : "down-arrow"} color={open ? theme.primaryWhite : theme.primaryBlack} />
       </Root>
@@ -76,6 +77,7 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
             "aria-labelledby": "basic-button",
           }}
           marginThreshold={0}
+					theme={theme}
         >
           <Droppable droppableId="droppable-list-button">
             {(provided) => (
@@ -100,6 +102,7 @@ const ListButton: React.FC<Props> = ({ open, onChange, onSelectTab }) => {
                     )}
                   </Draggable>
                 ))}
+								{!listTabs.length && <Notice text="List is empty" />}
                 {provided.placeholder}
               </TabsContainer>
             )}

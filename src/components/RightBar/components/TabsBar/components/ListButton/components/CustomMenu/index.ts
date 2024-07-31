@@ -1,7 +1,8 @@
 import { Menu } from "@mui/material";
 import styled from "styled-components";
+import { theme } from "../../../../../../../../utils";
 
-const CustomMenu = styled(Menu)(({ theme }) => ({
+const CustomMenu = styled(Menu)(() => ({
   '& .MuiPaper-root': {
     boxShadow: "0px 16px 30px 0px #7B7F9112",
     border: "1px solid #E9E9E9B2",
@@ -21,6 +22,7 @@ const CustomMenu = styled(Menu)(({ theme }) => ({
     },
     '&::-webkit-scrollbar-thumb:hover': {
       background: '#a0a4a8',
+			border: `2px solid ${theme.secondaryWhite}`,
     },
   },
 }));

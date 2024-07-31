@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import Root from "./components/Root";
 import Tab from "./components/Tab";
@@ -20,6 +20,12 @@ const TabsBar = () => {
 	const [isShowButton, setIsShowButton] = useState(true); 
 	
 	const lineRef = useRef<HTMLDivElement>(null);
+
+	const tabContainerHeight = useMemo(() => {
+		if(isShowList && isShowButton) return "48px";
+		if(!isShowList && isShowButton) return "56px";
+		if(!isShowButton) return "48px"
+	}, [isShowList, isShowButton]);
 
 	const onDragStart = useCallback(() => {
 		setCanUpdateTabsIds(false);
@@ -53,7 +59,7 @@ const TabsBar = () => {
 		}
 	}, []);
 
-  useEffect(() => {
+	useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -75,11 +81,6 @@ const TabsBar = () => {
 				const visibleTabsIds = visibleEntries.map((entry) => entry.target?.attributes.getNamedItem("data-rbd-draggable-id")?.value);
 				
 				if(isShowList && canUpdateTabsIds) {
-					if(visibleTabsIds.length === tabs.length) {
-						setIsShowButton(false);
-					} else {
-						setIsShowButton(true);
-					}
 					dispatch(setVisibleTabIds(visibleTabsIds));
 				}
 			},
@@ -102,16 +103,23 @@ const TabsBar = () => {
     };
   }, [isShowList, tabs, lineRef, lockedTabs, canUpdateTabsIds, windowWidth]);
 
-	// useEffect(() => {
-  //   if (lineRef?.current) {
-  //     const hasHScroll = window.innerWidth > lineRef?.current.scrollWidth;
+	useEffect(() => {
+    if (lineRef?.current && !isShowList) {
+				setTimeout(() => {
+				const tabsScrollWidth = lineRef?.current?.children[1]?.scrollWidth as any;
+				const tabsWidth = lineRef?.current?.children[1]?.clientWidth as any;
 
-	// 		console.log("window.innerWidth", window.innerWidth)
-	// 		console.log("lineRef?.current.clientWidth", lineRef?.current.scrollWidth)
+				const hasHScroll = tabsScrollWidth - 2 > tabsWidth;
 
-  //     setIsShowButton(hasHScroll)
-  //   }
-  // }, [windowWidth]);
+				setIsShowButton(hasHScroll)
+			}, 0)
+    } else {
+			setIsShowButton(true)
+		}
+  }, [windowWidth]);
+
+	console.log("isShowButton", isShowButton)
+	console.log("isShowList", isShowList)
 
   return (
     <Root ref={lineRef}>
@@ -151,7 +159,7 @@ const TabsBar = () => {
 						)}
 					</Droppable>
 				</DragDropContext>
-				{!isShowList && <Space />}
+				{(!isShowList && isShowButton) && <Space />}
 			</div>
       <DragDropContext onDragEnd={onDragEndUnlocked} onBeforeDragStart={onDragStart}>
         <Droppable direction="horizontal" droppableId="droppable-1">
@@ -160,7 +168,7 @@ const TabsBar = () => {
               {...provided.droppableProps}
               ref={provided.innerRef}
 							hideScroll={isShowList}
-							style={{height: isShowList ? "48px" : "56px"}}
+							style={{height: tabContainerHeight}}
             >
 							{tabs.map((tab, i) => (
                 <Draggable key={tab.id} draggableId={tab.id} index={i}
